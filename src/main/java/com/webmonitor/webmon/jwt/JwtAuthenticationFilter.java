@@ -3,9 +3,11 @@ package com.webmonitor.webmon.jwt;
 import com.webmonitor.webmon.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,15 +33,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           @NonNull HttpServletResponse response,
           @NonNull FilterChain filterChain) throws ServletException, IOException {
     final String authHeader = request.getHeader("Authorization");
-    final String jwt;
     final String userEmail;
+    String jwt = null;
 
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+
+    Cookie[] cookies = request.getCookies();
+
+    if (cookies != null) {
+      jwt = Arrays.stream(cookies)
+              .filter(cookie -> "jwt".equals(cookie.getName()))
+              .map(Cookie::getValue)
+              .findFirst()
+              .orElse(null);
+    }
+
+    log.info("//////////////////// User token Value is: - " + jwt);
+
+    if (jwt == null) {
       filterChain.doFilter(request, response);
+//      response.sendError(401, "Unauthorized");
       return;
     }
 
-    jwt = authHeader.substring(7);
+//    jwt = jwt.substring(7);
     userEmail = jwtService.extractUsername(jwt);
 
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -51,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
     }
     filterChain.doFilter(request, response);
-    log.info("Filter is working");
+    log.info(" ////////////////////////////////////////// Filter is working ////////////////////////////////////////////////");
 
   }
 }

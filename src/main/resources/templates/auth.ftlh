@@ -19,6 +19,7 @@
     Password: <label>
         <input type="password" name="password">
     </label><br/><br/>
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="SignUp"/>
 </form>
 
@@ -27,6 +28,7 @@
 <br/><form class="signing-form" action="/auth/signing" method="post">
     Email: <input type="email" name="email"><br/><br/>
     Password: <input type="password" name="password"><br/><br/>
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="SignIn"/>
 </form>
 

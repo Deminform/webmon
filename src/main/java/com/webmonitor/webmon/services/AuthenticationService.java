@@ -22,6 +22,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
+
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
             .firstname(request.getFirstname())
@@ -32,11 +33,12 @@ public class AuthenticationService {
             .build();
     repository.save(user);
     var jwtToken = jwtService.generateToken(user);
-    log.info("Auth registration - User role: " + user.getRole() + " / Auth user token: " + jwtToken); // log ********************************
+    log.info("Register - A new token has been generated: " + jwtToken); // log ********************************
     return AuthenticationResponse.builder()
             .token(jwtToken)
             .build();
   }
+
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
@@ -48,7 +50,7 @@ public class AuthenticationService {
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
-    log.info("Auth authenticate: " + user.getEmail()  + " successful"); // log ********************************
+    log.info("Authenticate - A new token has been generated: " + jwtToken); // log ********************************
     return AuthenticationResponse.builder()
         .token(jwtToken)
         .build();

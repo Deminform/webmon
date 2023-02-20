@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -22,10 +22,10 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .csrf()
-        .disable()
+//        .csrf()
+//        .disable()
         .authorizeHttpRequests()
-        .requestMatchers("/",  "/website/**", "/auth/**", "/auth/signup/**", "/images/**")
+        .requestMatchers("/",  "/website/**", "/auth/**", "/images/**")
         .permitAll()
         .anyRequest()
         .authenticated()

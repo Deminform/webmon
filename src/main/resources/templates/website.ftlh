@@ -29,6 +29,7 @@
     </label><br/><br/>
     Screenshot / Photo #1 <input type="file" name="file1"><br/><br/>
     Screenshot / Photo #2 <input type="file" name="file2"><br/>
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Add website"/>
 </form>
 

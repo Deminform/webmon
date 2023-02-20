@@ -5,8 +5,7 @@
 </head>
 <body>
 <h4>Home Page</h4>
-<a href="/auth">Sign Up</a><br/>
-<a href="/auth">Sign In</a><br/>
+<a href="/auth">Sign Up / Sign In</a><br/><br/>
 
 <form action="/" method="get">
     Search by domain: <label>
@@ -33,6 +32,7 @@
     </label><br/><br/>
     Screenshot / Photo #1 <input type="file" name="file1"><br/><br/>
     Screenshot / Photo #2 <input type="file" name="file2"><br/>
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Add website"/>
 </form>
 
