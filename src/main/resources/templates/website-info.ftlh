@@ -22,7 +22,20 @@
 <hr>
 <h3>Remove this domain from my list</h3>
 <form action="/website/remove/${website.id}" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Remove"/>
+</form>
+
+<br/><br/>
+<a href="/">Homepage</a>
+<br/><br/>
+<a href="/api/v1/demo-controller">Demo page</a><br/><br/>
+<br/><br/>
+<a href="/website">Website Monitoring</a><br/><br/>
+<br/><br/>
+<form action="/user/logout" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="logout"/>
 </form>
 </body>
 </html>

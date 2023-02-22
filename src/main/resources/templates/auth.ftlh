@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>WEBMON</title>
+    <title>Authentication page</title>
 </head>
 <body>
-<h1>Please SignUp</h1>
+<h1>SignUp</h1>
 <br/>
 <form action="/auth/signup" method="post">
     First name: <label>
@@ -24,7 +24,7 @@
 </form>
 
 <br/><br/>
-<h1>Please SignUp</h1>
+<h1>SignIn</h1>
 <br/><form class="signing-form" action="/auth/signing" method="post">
     Email: <input type="email" name="email"><br/><br/>
     Password: <input type="password" name="password"><br/><br/>
@@ -34,15 +34,20 @@
 
 <br/><br/>
 
+
+<form action="/user/logout" method="post">
+<#--    <input type="hidden" name="_csrf" value="${_csrf.token}">-->
+    <input type="submit" value="logout"/>
+</form>
+
+<br/><br/>
+
 <a href="/">Homepage</a>
-<a href="/auth">SignUp / SignIn</a><br/><br/>
+<br/><br/>
 <a href="/api/v1/demo-controller">Demo page</a><br/><br/>
-<a href="/logout">Logout</a>
+<br/><br/>
+<a href="/website">Website Monitoring</a><br/><br/>
 
-
-<#--<#if errorMessage??>-->
-<#--    <h2 style="color: orangered">${errorMessage}</h2>-->
-<#--</#if>-->
 </body>
 </html>
 

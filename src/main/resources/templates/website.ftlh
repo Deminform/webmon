@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>WEBMON</title>
 </head>
 <body>
 <h4>Website List</h4>
 
-<form action="/" method="get">
+<form action="/website" method="get">
     Search by domain: <label>
         <input type="text" name="domain">
     </label><br/>
     <input type="submit" value="Search">
 
 </form>
-
+<br/><br/>
 <#list websites as website>
     <div>
         <p><b>${website.domain}</b> | status is: ${website.status} | <a href="/website/${website.id}">More info...</a></p>
@@ -21,8 +21,10 @@
 <#else>
     <h3>No domains added</h3>
 </#list>
-<hr>
-<h3>Add new website</h3>
+
+<br/><br/>
+
+<h3>Add new website</h3><br/>
 <form action="/website/create" method="post" enctype="multipart/form-data">
     Domain: <label>
         <input type="text" name="domain"/>
@@ -33,7 +35,16 @@
     <input type="submit" value="Add website"/>
 </form>
 
+<form action="/user/logout" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="logout"/>
+</form>
+<br/><br/>
+<a href="/">Homepage</a>
+<br/><br/>
+<a href="/api/v1/demo-controller">Demo page</a><br/><br/>
+<br/><br/>
+<a href="/website">Website Monitoring</a><br/><br/>
+
 </body>
 </html>
-
-

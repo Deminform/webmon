@@ -1,5 +1,6 @@
 package com.webmonitor.webmon.jwt;
 
+import com.webmonitor.webmon.services.AuthenticationService;
 import com.webmonitor.webmon.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,13 +27,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
+  private final AuthenticationService service;
 
   @Override
   protected void doFilterInternal(
           @NonNull HttpServletRequest request,
           @NonNull HttpServletResponse response,
           @NonNull FilterChain filterChain) throws ServletException, IOException {
-    final String authHeader = request.getHeader("Authorization");
     final String userEmail;
     String jwt = null;
 

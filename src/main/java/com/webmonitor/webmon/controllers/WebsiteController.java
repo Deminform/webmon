@@ -25,10 +25,10 @@ public class WebsiteController {
 //        return ResponseEntity.ok("PUT HERE CODE"); // -------- !!!!!!!!! ----------
 //    }
 
-    @GetMapping("/")
+    @GetMapping("/website")
     public String websites(@RequestParam(name = "domain", required = false) String domain, Model model) {
         model.addAttribute("websites", websiteService.lisOftWebsites(domain));
-        return "index";
+        return "website";
     }
 
     @GetMapping("/website/{id}")
@@ -44,20 +44,13 @@ public class WebsiteController {
         website.setNotes("Need to check");
         website.setIp("Need to check");
         website.setStatus("Need to check");
-
-//        if (website.getImageUrl() == null) website.setImageUrl("images/noImage.jpg");
-
         websiteService.saveWebsite(website, file1, file2);
-        return "redirect:/";
+        return "redirect:/website";
     }
 
     @PostMapping("/website/remove/{id}")
     public String removeWebsite(@PathVariable Long id) {
         websiteService.removeWebsite(id);
-        return "redirect:/";
+        return "redirect:/website";
     }
-
-
-
-
 }
