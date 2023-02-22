@@ -25,6 +25,7 @@
 <br/><br/>
 
 <h3>Add new website</h3><br/>
+
 <form action="/website/create" method="post" enctype="multipart/form-data">
     Domain: <label>
         <input type="text" name="domain"/>

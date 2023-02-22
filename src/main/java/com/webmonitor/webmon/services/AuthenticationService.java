@@ -33,7 +33,7 @@ public class AuthenticationService {
             .build();
     repository.save(user);
     var jwtToken = jwtService.generateToken(user);
-    log.info("Register - A new token has been generated: " + jwtToken); // log ********************************
+//    log.info("Register - A new token has been generated: " + jwtToken); // log ********************************
     return AuthenticationResponse.builder()
             .token(jwtToken)
             .build();
@@ -50,7 +50,7 @@ public class AuthenticationService {
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
-    log.info("Authenticate - A new token has been generated: " + jwtToken); // log ********************************
+//    log.info("Authenticate - A new token has been generated: " + jwtToken); // log ********************************
     return AuthenticationResponse.builder()
         .token(jwtToken)
         .build();
