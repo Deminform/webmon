@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="data:,">
     <title>WEBMON</title>
 </head>
 <body>
@@ -16,8 +17,14 @@
 <br/><br/>
 <#list websites as website>
     <div>
-        <p><b>${website.domain}</b> | status is: ${website.status} | <a href="/website/${website.id}">More info...</a></p>
+        <p><b>${website.domain}</b> | status is: ${website.status} | <a href="/website/${website.id}">More info...</a> </p>
     </div>
+
+    <form action="/website/remove/${website.id}" method="post">
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
+        <input type="submit" value="Remove"/>
+    </form>
+
 <#else>
     <h3>No domains added</h3>
 </#list>

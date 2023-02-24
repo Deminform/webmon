@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="data:,">
     <title>Webmon | Websites monitoring</title>
 </head>
 <body>

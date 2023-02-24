@@ -5,7 +5,6 @@ import com.webmonitor.webmon.auth.AuthenticationResponse;
 import com.webmonitor.webmon.services.AuthenticationService;
 import com.webmonitor.webmon.auth.RegisterRequest;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.util.Arrays;
 
 
 @Slf4j
@@ -34,16 +30,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {  /* RedirectAttributes redirectAttributes */
-
+    public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
         service.register(request);
-
-//        redirectAttributes.addFlashAttribute("email", request.getEmail());
-//        redirectAttributes.addFlashAttribute("firstname", request.getFirstname());
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/");
-
         return ResponseEntity.status(HttpStatus.FOUND)
                 .headers(headers)
                 .build();
@@ -56,7 +46,7 @@ public class AuthenticationController {
         String token = service.authenticate(request).getToken();
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(20 * 60);
+        cookie.setMaxAge(24 * 60 * 60);
         cookie.setPath("/");
         cookie.setSecure(true);
 
