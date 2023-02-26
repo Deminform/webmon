@@ -9,45 +9,47 @@
 <h4>Website List</h4>
 
 <form action="/website" method="get">
-    Search by domain: <label>
+    Search by domain: <label> Some text </label>
         <input type="text" name="domain">
-    </label><br/>
     <input type="submit" value="Search">
+
+    <br/>
 
 </form>
 <br/><br/>
-<#list websites as website>
-    <div class="web-show-stat">
-        <p><b>${website.domain}</b> | status is: ${website.status} | <a href="/website/${website.id}">More info...</a> </p>
-    </div>
-
-    <form action="/website/remove/${website.id}" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
-        <input type="submit" value="Remove"/>
-    </form>
-
-<#else>
+<div class="web-show-stat-container">
+    <#list websites as website>
+        <div class="web-show-stat">
+            <p><b>${website.domain}</b>
+                <br/>
+                status is: ${website.status}
+                <br/>
+                <a href="/website/${website.id}">More info...</a></p>
+            <form action="/website/remove/${website.id}" method="post">
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                <input type="submit" value="Remove"/>
+            </form>
+        </div>
+    <#else>
     <h3>No domains added</h3>
-</#list>
+    </#list>
+</div>
+
+
 
 <br/><br/>
 
 <h3>Add new website</h3><br/>
 
 <form action="/website/create" method="post" enctype="multipart/form-data">
-    Domain: <label>
+    Domain: <label>Some text</label>
         <input type="text" name="domain"/>
-    </label><br/><br/>
-    Screenshot / Photo #1 <input type="file" name="file1"><br/><br/>
-    Screenshot / Photo #2 <input type="file" name="file2"><br/>
+    Screenshot #1 <input type="file" name="file1">
+    Screenshot #2 <input type="file" name="file2">
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Add website"/>
 </form>
 
-<form action="/user/logout" method="post">
-    <input type="hidden" name="_csrf" value="${_csrf.token}">
-    <input type="submit" value="logout"/>
-</form>
 <br/><br/>
 <a href="/">Homepage</a>
 <br/><br/>

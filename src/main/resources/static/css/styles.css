@@ -1,40 +1,40 @@
 @font-face {
     font-family: 'Tajawal-Black';
-    src: url('static/fonts/Tajawal-Black.ttf') format('truetype');
+    src: url('../fonts/Tajawal-Black.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
 
 @font-face {
     font-family: 'Tajawal-Bold';
-    src: url('static/fonts/Tajawal-Bold.ttf') format('truetype');
+    src: url('../fonts/Tajawal-Bold.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
 
 @font-face {
     font-family: 'Tajawal-ExtraBold';
-    src: url('static/fonts/Tajawal-ExtraLight.ttf') format('truetype');
+    src: url('../fonts/Tajawal-ExtraLight.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
 
 @font-face {
     font-family: 'Tajawal-Light';
-    src: url('static/fonts/Tajawal-Light.ttf') format('truetype');
+    src: url('../fonts/Tajawal-Light.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
 
 @font-face {
     font-family: 'Tajawal-Medium';
-    src: url('static/fonts/Tajawal-Medium.ttf') format('truetype');
+    src: url('../fonts/Tajawal-Medium.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
 @font-face {
     font-family: 'Tajawal-Regular';
-    src: url('static/fonts/Tajawal-Regular.ttf') format('truetype');
+    src: url('../fonts/Tajawal-Regular.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
@@ -46,11 +46,12 @@ body {
     margin: 0;
     font-family: 'Tajawal-Regular', sans-serif;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
+    padding: 50px 5% 50px 5%;
 }
 
 body.homepage {
-    background: url("images/bg-1hp.webp") no-repeat center center fixed;
+    background: url("../images/bg-1hp.webp") no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -242,4 +243,20 @@ label {
     left: 80%;
     transform: translateX(-50%);
     z-index: 2;
+}
+
+/*   ------------------ websites-------------------   */
+
+.web-show-stat-container {
+
+}
+
+.web-show-stat {
+    width: 27%;
+    display: inline-block;
+    margin-right: 2%;
+    margin-bottom: 50px;
+    background: #242424;
+    padding: 5px 20px 20px 20px;
+    border-radius: 0.2rem;
 }

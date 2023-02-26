@@ -32,8 +32,10 @@ public class AuthenticationService {
             .role(Role.USER)
             .build();
     repository.save(user);
+
     var jwtToken = jwtService.generateToken(user);
-//    log.info("Register - A new token has been generated: " + jwtToken); // log ********************************
+    log.info("All info from user: Username - " + user.getUsername() + " | First Name - " + user.getFirstname() + " | Last name - " + user.getLastname() + " | Role - " + user.getRole() + " | Id - " + user.getId()); // log ********************************
+    log.info("All info from TOKEN: Username - " + jwtToken.toString()); // log ********************************
     return AuthenticationResponse.builder()
             .token(jwtToken)
             .build();

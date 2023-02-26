@@ -2,18 +2,25 @@ package com.webmonitor.webmon.controllers;
 
 import com.webmonitor.webmon.auth.AuthenticationRequest;
 import com.webmonitor.webmon.auth.AuthenticationResponse;
+import com.webmonitor.webmon.models.User;
+import com.webmonitor.webmon.repositories.UserRepository;
 import com.webmonitor.webmon.services.AuthenticationService;
 import com.webmonitor.webmon.auth.RegisterRequest;
+import com.webmonitor.webmon.services.JwtService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @Slf4j
@@ -23,13 +30,66 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService service;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
 
+
+
+
+
+/*    ----------------------------------     */
 
     @GetMapping
-    @PreAuthorize("!hasRole('USER')")
-    public String signupPage() {
-        return "/auth";
+    public String showProfile(Model model, HttpServletRequest request) {
+        String email = getEmailFromCookie(request);
+        return userRepository.findByEmail(email)
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return "/profile";
+                })
+                .orElse("/auth");
     }
+
+//    @GetMapping
+//    public String showProfile(Model model, HttpServletRequest request) {
+//        String email = null;
+//
+//        if (request != null) {
+//            email = getEmailFromCookie(request);
+//        }
+//
+//        Optional<User> userOptional = userRepository.findByEmail(email);
+//
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            model.addAttribute("user", user);
+//            return "/profile";
+//
+//        } else {
+//            // Пользователь не авторизован, перенаправление на страницу входа в систему
+//            return "/auth";
+//        }
+//    }
+
+    private String getEmailFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("jwt")) {
+                    String token = cookie.getValue();
+                    return jwtService.extractUsername(token);
+                }
+            }
+        }
+        return null;
+    }
+
+/*    ----------------------------------     */
+
+//    @GetMapping
+//    public String signupPage() {
+//        return "/auth";
+//    }
 
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
