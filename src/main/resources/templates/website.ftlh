@@ -3,6 +3,7 @@
 <head>
     <link rel="icon" href="data:,">
     <title>WEBMON</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 </head>
 <body>
 <h4>Website List</h4>
@@ -16,7 +17,7 @@
 </form>
 <br/><br/>
 <#list websites as website>
-    <div>
+    <div class="web-show-stat">
         <p><b>${website.domain}</b> | status is: ${website.status} | <a href="/website/${website.id}">More info...</a> </p>
     </div>
 
@@ -50,7 +51,7 @@
 <br/><br/>
 <a href="/">Homepage</a>
 <br/><br/>
-<a href="/api/v1/demo-controller">Demo page</a><br/><br/>
+<a href="/demo">Demo page</a><br/><br/>
 <br/><br/>
 <a href="/website">Website Monitoring</a><br/><br/>
 

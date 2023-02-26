@@ -4,6 +4,7 @@
     <link rel="icon" href="data:,">
     <meta charset="UTF-8">
     <title>WebMonitor</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 </head>
 <body style="background: #101010; color: #d2d2d2">
 <h1>WEBMON</h1><hr>
@@ -19,9 +20,6 @@
 <b>Status: </b>${website.status}<br/>
 <b>id: </b>${website.id}<br/>
 
-
-<hr>
-<h3>Remove this domain from my list</h3>
 <form action="/website/remove/${website.id}" method="post">
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <input type="submit" value="Remove"/>
@@ -30,7 +28,7 @@
 <br/><br/>
 <a href="/">Homepage</a>
 <br/><br/>
-<a href="/api/v1/demo-controller">Demo page</a><br/><br/>
+<a href="/demo">Demo page</a><br/><br/>
 <br/><br/>
 <a href="/website">Website Monitoring</a><br/><br/>
 <br/><br/>

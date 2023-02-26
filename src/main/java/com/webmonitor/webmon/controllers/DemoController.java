@@ -1,20 +1,16 @@
 package com.webmonitor.webmon.controllers;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api")
+@Controller
+@RequestMapping("/demo")
+@RequiredArgsConstructor
 public class DemoController {
 
-//  @GetMapping
-//  public ResponseEntity<String> sayHello() {
-//    return ResponseEntity.ok("Hello from secured endpoint");
-//  }
-
-
-  @GetMapping("/v1/demo-controller")
+  @GetMapping
   public String sayHello2() {
 
     return "/demo";

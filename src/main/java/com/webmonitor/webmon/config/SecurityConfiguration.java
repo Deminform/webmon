@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Slf4j
 @Configuration
@@ -30,10 +30,13 @@ public class SecurityConfiguration {
 //        csrfTokenRepository.setCookieHttpOnly(true);
 
         http
-                .csrf().csrfTokenRepository(new CookieCsrfTokenRepository())
+
+//                .csrf().csrfTokenRepository(new CookieCsrfTokenRepository())
+                .csrf().csrfTokenRepository(new HttpSessionCsrfTokenRepository())
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/auth/**").permitAll()
+                .requestMatchers("/", "/auth/**", "/static/css/**").permitAll()
+                .requestMatchers("/auth/**").hasRole("USER")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -42,6 +45,8 @@ public class SecurityConfiguration {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+//                .headers()
+//                .cacheControl().disable();;
 
         return http.build();
     }
