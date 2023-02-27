@@ -8,6 +8,17 @@
 <body>
 <h4>Website List</h4>
 
+<div>
+    <a href="/">Homepage</a>
+</div>
+
+
+<div>
+    <a href="/auth">Profile</a><br/><br/>
+</div>
+
+
+
 <form action="/website" method="get">
     Search by domain: <label> Some text </label>
         <input type="text" name="domain">
@@ -19,16 +30,32 @@
 <br/><br/>
 <div class="web-show-stat-container">
     <#list websites as website>
+
         <div class="web-show-stat">
-            <p><b>${website.domain}</b>
-                <br/>
-                status is: ${website.status}
-                <br/>
-                <a href="/website/${website.id}">More info...</a></p>
-            <form action="/website/remove/${website.id}" method="post">
-                <input type="hidden" name="_csrf" value="${_csrf.token}">
-                <input type="submit" value="Remove"/>
-            </form>
+
+            <div class="header-web-show">
+                <H4><b>${website.domain}</b></H4>
+            </div>
+            <div class="body-web-show">
+                <p>Status: ${website.status}</p>
+
+            </div>
+
+            <div class="bottom-web-show">
+
+                <div class="part-info">
+                    <a href="/website/${website.id}">More info...</a>
+                </div>
+
+                <div class="part-remove">
+                    <form action="/website/remove/${website.id}" method="post">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        <input class="rem-in" type="submit" value="Remove"/>
+                    </form>
+                </div>
+
+            </div>
+
         </div>
     <#else>
     <h3>No domains added</h3>
@@ -50,12 +77,6 @@
     <input type="submit" value="Add website"/>
 </form>
 
-<br/><br/>
-<a href="/">Homepage</a>
-<br/><br/>
-<a href="/demo">Demo page</a><br/><br/>
-<br/><br/>
-<a href="/website">Website Monitoring</a><br/><br/>
 
 </body>
 </html>

@@ -1,50 +1,46 @@
 @font-face {
-    font-family: 'Tajawal-Black';
-    src: url('../fonts/Tajawal-Black.ttf') format('truetype');
+    font-family: 'OpenSans-Italic';
+    src: url('../fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
 
 @font-face {
-    font-family: 'Tajawal-Bold';
-    src: url('../fonts/Tajawal-Bold.ttf') format('truetype');
+    font-family: 'OpenSans';
+    src: url('../fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype');
     /* Дополнительные форматы шрифтов, если они есть */
     font-style: normal; /* Стиль шрифта */
 }
 
-@font-face {
-    font-family: 'Tajawal-ExtraBold';
-    src: url('../fonts/Tajawal-ExtraLight.ttf') format('truetype');
-    /* Дополнительные форматы шрифтов, если они есть */
-    font-style: normal; /* Стиль шрифта */
+input[type="submit"] {
+    background: #2b2f30;
+    border: none;
+    color: #6c6c6c;
+    cursor: pointer;
+    transition: 0.2s ease;
+    padding: 4px 15px 4px 15px;
 }
 
-@font-face {
-    font-family: 'Tajawal-Light';
-    src: url('../fonts/Tajawal-Light.ttf') format('truetype');
-    /* Дополнительные форматы шрифтов, если они есть */
-    font-style: normal; /* Стиль шрифта */
+input[type="submit"]:hover {
+    background: #4b5156;
+    color: #d5d5d5;
+    transition: 0.2s ease;
 }
 
-@font-face {
-    font-family: 'Tajawal-Medium';
-    src: url('../fonts/Tajawal-Medium.ttf') format('truetype');
-    /* Дополнительные форматы шрифтов, если они есть */
-    font-style: normal; /* Стиль шрифта */
-}
-@font-face {
-    font-family: 'Tajawal-Regular';
-    src: url('../fonts/Tajawal-Regular.ttf') format('truetype');
-    /* Дополнительные форматы шрифтов, если они есть */
-    font-style: normal; /* Стиль шрифта */
+p {
+    padding: 0px;
+    margin: 0px;
 }
 
+h4 {
+    margin: 0px 0px 0px 0px;
+}
 
 body {
     background-color: #1a1a1a;
     color: #cccccc;
     margin: 0;
-    font-family: 'Tajawal-Regular', sans-serif;
+    font-family: 'OpenSans', sans-serif;
     font-weight: 400;
     font-size: 16px;
     padding: 50px 5% 50px 5%;
@@ -252,11 +248,53 @@ label {
 }
 
 .web-show-stat {
-    width: 27%;
+    width: 33%;
     display: inline-block;
-    margin-right: 2%;
     margin-bottom: 50px;
     background: #242424;
-    padding: 5px 20px 20px 20px;
-    border-radius: 0.2rem;
+    padding: 0px 0px 0px 0px;
+    border-radius: 0.3rem;
+    text-align: left;
+}
+
+.header-web-show {
+    background: #2b2f30;
+    padding: 15px 20px 15px 20px;
+    text-transform: uppercase;
+    border-radius: 0.3rem 0.3rem 0.0rem 0.0rem
+
+}
+
+.bottom-web-show {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: 40px;
+    border-top: 1px solid #303030;
+
+}
+
+.body-web-show {
+    padding: 20px 20px 20px 20px;
+}
+
+.part-remove {
+    width: 20%;
+    padding-right: 20px;
+    padding-left: 15px;
+}
+
+.part-info {
+    width: 80%;
+    padding-left: 20px;
+    border-right: 1px solid #303030;
+    font-size: 14px;
+}
+
+input.rem-in[type="submit"] {
+    background: #fff0;
+}
+
+input.rem-in[type="submit"]:hover {
+    color: #b22626;
 }
