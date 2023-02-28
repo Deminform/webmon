@@ -14,7 +14,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
-                .setCacheControl(CacheControl.maxAge(1, TimeUnit.MINUTES));
+                .setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS));
 
     }
 }

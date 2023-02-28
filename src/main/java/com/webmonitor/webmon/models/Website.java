@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "websites")
@@ -19,22 +17,22 @@ public class Website {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+
     @Column(name = "domain")
     private String domain;
+
     @Column(name = "notes")
     private String notes;
+
     @Column(name = "ip")
     private String ip;
+
     @Column(name = "status")
     private String status;
 
-//    @Column(name = "imageUrl", columnDefinition = "text")
-//    private String imageUrl;
+    @Column(name = "delay")
+    private String delayResponse;
 
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "website")
-    private List<Image> images = new ArrayList<>();
-    private Long previewImageId;
     private LocalDateTime dateOfCreated;
 
     @PrePersist
@@ -42,10 +40,18 @@ public class Website {
         dateOfCreated = LocalDateTime.now();
     }
 
-    public void addImageToWebsite(Image image) {
-        image.setWebsite(this);
-        images.add(image);
-    }
+//    @Column(name = "imageUrl", columnDefinition = "text")
+//    private String imageUrl;
+
+
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "website")
+//    private List<Image> images = new ArrayList<>();
+//    private Long previewImageId;
+
+//    public void addImageToWebsite(Image image) {
+//        image.setWebsite(this);
+//        images.add(image);
+//    }
 
 
 

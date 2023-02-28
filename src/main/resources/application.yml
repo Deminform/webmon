@@ -17,6 +17,7 @@ spring:
     expose-request-attributes: true
 
 
+#url: jdbc:mysql://localhost:3306/webmon?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
 
 #spring:
 #  datasource:

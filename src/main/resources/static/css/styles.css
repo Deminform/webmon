@@ -44,6 +44,9 @@ body {
     font-weight: 400;
     font-size: 16px;
     padding: 50px 5% 50px 5%;
+    /* Для Firefox */
+    scrollbar-width: auto; /* ширина полосы прокрутки */
+    scrollbar-color: #303030 #1a1a1a; /* цвет полосы прокрутки и фона трека */
 }
 
 body.homepage {
@@ -244,21 +247,33 @@ label {
 /*   ------------------ websites-------------------   */
 
 .web-show-stat-container {
-
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 -10px;
 }
 
 .web-show-stat {
-    width: 33%;
+    width: 33.33%;
     display: inline-block;
-    margin-bottom: 50px;
     background: #242424;
     padding: 0px 0px 0px 0px;
     border-radius: 0.3rem;
     text-align: left;
+    transition: 0.2s ease-out;
+    min-height: 200px;
+    flex: 0 1 calc(33.33% - 10px);
+    margin: 0 5px 50px 5px;
+}
+
+.web-show-stat:hover {
+    background: rgb(63 108 135 / 90%);
+    transition: 0.2s ease-out;;
 }
 
 .header-web-show {
-    background: #2b2f30;
+    background: rgba(43, 47, 48, 0.9);
     padding: 15px 20px 15px 20px;
     text-transform: uppercase;
     border-radius: 0.3rem 0.3rem 0.0rem 0.0rem
@@ -269,13 +284,15 @@ label {
     display: flex;
     width: 100%;
     align-items: center;
-    height: 40px;
+    height: 38px;
     border-top: 1px solid #303030;
+    background: rgba(36, 36, 36, 0.9);
 
 }
 
 .body-web-show {
     padding: 20px 20px 20px 20px;
+    background: rgba(36, 36, 36, 0.9);
 }
 
 .part-remove {
@@ -295,6 +312,142 @@ input.rem-in[type="submit"] {
     background: #fff0;
 }
 
+input.rem-in-info[type="submit"] {
+    background: #953a3a;
+    color: #ebebeb;
+    width: 20%;
+    min-width: 150px;
+}
+
+input.rem-in-info[type="submit"]:hover {
+    background: #a25a5a;
+}
+
 input.rem-in[type="submit"]:hover {
     color: #b22626;
 }
+
+.info-block {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    /*background: rgba(36, 36, 36, 0.9);*/
+}
+
+.menu-line {
+    justify-content: flex-end;
+    display: flex;
+    width: 100%;
+    padding: 20px 0px 40px 0px;
+}
+
+.info-left-list {
+    width: 30%;
+    background: rgba(36, 36, 36, 0.9);
+}
+
+.info-right-details {
+    width: 70%;
+    padding: 0px 20px 20px 40px;
+    /*background-color: #1a1a1a;*/
+}
+
+.web-show-inline {
+
+}
+
+.menu-item {
+    padding-left: 20px;
+}
+
+.info-right-line {
+
+}
+
+.info-item {
+    display: flex;
+    padding: 5px 0px 5px 0px;
+    border-bottom: 1px solid #303030;
+}
+
+.line-value {
+    padding-left: 10px;
+}
+
+.line-label {
+    color: #5c5c5c;
+    width: 70px;
+}
+
+.info-item-rem {
+    display: flex;
+    justify-content: flex-end;
+}
+
+img.preview-img {
+    width: auto;
+    height: auto;
+    max-width: 300px;
+    max-height: 150px;
+}
+
+.search-result {
+    margin: 0px 10px 20px 0px;
+}
+
+input.search-input {
+    margin: 0px 10px 0px 10px;
+    height: 15px;
+}
+
+div#add-item-module {
+    text-align: center;
+}
+
+a.a-list {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #303030;
+    width: 85%;
+    transition: 0.2s ease-out;
+    text-transform: lowercase;
+}
+
+a.a-list:hover {
+    background: rgb(28 28 28 / 90%);
+    transition: 0.2s ease-out;
+}
+
+li.list-li {
+    list-style-type: none;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px 0px 0px 15px;
+}
+
+.list-web-items {
+    padding: 15px 0px 20px 0px;
+}
+
+/* - - - - - - - - - - - - - - - - - - */
+
+/* Для WebKit */
+::-webkit-scrollbar {
+    width: 12px; /* ширина полосы прокрутки */
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a; /* цвет фона трека */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #303030; /* цвет полосы прокрутки */
+}
+
+
+
+/* - - - - - - - - - - - - - - - - - - */
+
+

@@ -6,28 +6,28 @@
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 </head>
 <body>
-<h4>Website List</h4>
+<h3>Website List</h3>
 
-<div>
-    <a href="/">Homepage</a>
+<div class="menu-line">
+    <div class="menu-item"><a href="/">Homepage</a></div>
+    <div class="menu-item"><a href="/auth">Profile</a></div>
+    <div class="menu-item"><a href="/website">Website Monitoring</a></div>
+    <div class="menu-item"><a href="/website">
+            <form action="/user/logout" method="post">
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                <input type="submit" value="logout"/>
+            </form>
+        </a></div>
 </div>
 
-
-<div>
-    <a href="/auth">Profile</a><br/><br/>
+<div class="search-result">
+    <form class="search-form-main" action="/website" method="get">
+        Search by domain: <label> Some text </label>
+        <input class="search-input" type="text" name="domain">
+        <input type="submit" value="Search">
+    </form>
 </div>
 
-
-
-<form action="/website" method="get">
-    Search by domain: <label> Some text </label>
-        <input type="text" name="domain">
-    <input type="submit" value="Search">
-
-    <br/>
-
-</form>
-<br/><br/>
 <div class="web-show-stat-container">
     <#list websites as website>
 
@@ -37,8 +37,9 @@
                 <H4><b>${website.domain}</b></H4>
             </div>
             <div class="body-web-show">
-                <p>Status: ${website.status}</p>
-
+                <div id="body-web-line">Status: ${website.status}</div>
+                <div id="body-web-line">IP: ${website.ip}</div>
+                <div id="body-web-line">Delay: ${website.delayResponse}</div>
             </div>
 
             <div class="bottom-web-show">
@@ -57,26 +58,24 @@
             </div>
 
         </div>
+
     <#else>
     <h3>No domains added</h3>
     </#list>
+
+    <div class="web-show-stat" id="add-item-module">
+        <h3>Add new website</h3>
+        <form action="/website/create" method="post" enctype="multipart/form-data">
+            <label>Some text</label>
+            <input type="text" name="domain" placeholder="Domain"/>
+<#--            Screenshot #1 <input type="file" name="file1">-->
+<#--            Screenshot #2 <input type="file" name="file2">-->
+            <input type="hidden" name="_csrf" value="${_csrf.token}">
+            <input type="submit" value="Add website"/>
+        </form>
+    </div>
+
 </div>
-
-
-
-<br/><br/>
-
-<h3>Add new website</h3><br/>
-
-<form action="/website/create" method="post" enctype="multipart/form-data">
-    Domain: <label>Some text</label>
-        <input type="text" name="domain"/>
-    Screenshot #1 <input type="file" name="file1">
-    Screenshot #2 <input type="file" name="file2">
-    <input type="hidden" name="_csrf" value="${_csrf.token}">
-    <input type="submit" value="Add website"/>
-</form>
-
 
 </body>
 </html>
