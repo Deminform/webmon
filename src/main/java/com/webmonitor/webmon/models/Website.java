@@ -21,8 +21,8 @@ public class Website {
     @Column(name = "domain")
     private String domain;
 
-    @Column(name = "notes")
-    private String notes;
+    @Column(name = "loadTime")
+    private String loadTime;
 
     @Column(name = "ip")
     private String ip;
@@ -32,6 +32,12 @@ public class Website {
 
     @Column(name = "delay")
     private String delayResponse;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "screenshot", length = 5000000)
+    private String screenshot;
 
     private LocalDateTime dateOfCreated;
 

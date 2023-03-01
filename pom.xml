@@ -35,6 +35,18 @@
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 
+
+			<!--	Chrome Driver SELENIUM	-->
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.8.1</version>
+		</dependency>
+
+
+
+
 <!--						thymeleaf-->
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->

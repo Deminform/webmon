@@ -275,7 +275,7 @@ label {
 .header-web-show {
     background: rgba(43, 47, 48, 0.9);
     padding: 15px 20px 15px 20px;
-    text-transform: uppercase;
+    text-transform: capitalize;
     border-radius: 0.3rem 0.3rem 0.0rem 0.0rem
 
 }
@@ -301,8 +301,19 @@ label {
     padding-left: 15px;
 }
 
+.part-update {
+    width: 20%;
+    padding-right: 20px;
+    padding-left: 15px;
+    border-right: 1px solid #303030;
+}
+
+input.update-in {
+    background: none;
+}
+
 .part-info {
-    width: 80%;
+    width: 60%;
     padding-left: 20px;
     border-right: 1px solid #303030;
     font-size: 14px;
@@ -312,25 +323,41 @@ input.rem-in[type="submit"] {
     background: #fff0;
 }
 
-input.rem-in-info[type="submit"] {
-    background: #953a3a;
+input.update-in-info[type="submit"] {
+    background: none;
     color: #ebebeb;
     width: 20%;
     min-width: 150px;
 }
 
-input.rem-in-info[type="submit"]:hover {
-    background: #a25a5a;
+input.update-in-info[type="submit"]:hover {
+    background: #338078;
+}
+
+input.remove-in-info[type="submit"] {
+    background: none;
+    color: #ebebeb;
+    width: 20%;
+    min-width: 150px;
+}
+
+input.remove-in-info[type="submit"]:hover {
+    background: #c43939;
 }
 
 input.rem-in[type="submit"]:hover {
     color: #b22626;
 }
 
+input.update-in[type="submit"]:hover {
+    color: #338078;
+    background: none;
+}
+
 .info-block {
     display: flex;
     width: 100%;
-    align-items: center;
+    align-items: flex-start;;
     /*background: rgba(36, 36, 36, 0.9);*/
 }
 
@@ -343,7 +370,7 @@ input.rem-in[type="submit"]:hover {
 
 .info-left-list {
     width: 30%;
-    background: rgba(36, 36, 36, 0.9);
+    border-right: 1px solid #303030;
 }
 
 .info-right-details {
@@ -382,6 +409,7 @@ input.rem-in[type="submit"]:hover {
 .info-item-rem {
     display: flex;
     justify-content: flex-end;
+    margin-top: 15px;
 }
 
 img.preview-img {
@@ -414,7 +442,7 @@ a.a-list {
 }
 
 a.a-list:hover {
-    background: rgb(28 28 28 / 90%);
+    background: rgb(38 38 38 / 90%);
     transition: 0.2s ease-out;
 }
 
@@ -428,7 +456,7 @@ ul {
 }
 
 .list-web-items {
-    padding: 15px 0px 20px 0px;
+    padding: 0px 0px 20px 0px;
 }
 
 /* - - - - - - - - - - - - - - - - - - */
@@ -446,6 +474,28 @@ ul {
     background: #303030; /* цвет полосы прокрутки */
 }
 
+img.image-preview {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+div#body-web-line {
+    display: flex;
+    padding: 5px 0 5px 0;
+    border-bottom: 1px solid #2e2e2e;
+    font-size: 15px;
+}
+
+div#label {
+    color: #646464;
+    width: 25%;
+    min-width: 80px;
+}
+
+div#details {
+    width: 15%;
+    min-width: 115px;
+}
 
 
 /* - - - - - - - - - - - - - - - - - - */

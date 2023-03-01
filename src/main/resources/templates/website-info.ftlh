@@ -53,36 +53,58 @@
 
             <div class="info-right-line">
 
+                <div id="image-web-line">
+                    <img class="image-preview" src="data:image/png;base64,${website.screenshot}" alt="${website.domain}_screenshot"/>
+                </div>
+
                 <div class="info-item">
-                    <div class="line-label">Domain: </div>
+                    <div class="line-label" id="details">Domain: </div>
                     <div class="line-value">${website.domain}</div>
                 </div>
 
                 <div class="info-item">
-                    <div class="line-label">Notes: </div>
-                    <div class="line-value">${website.notes}</div>
-                </div>
-
-                <div class="info-item">
-                    <div class="line-label">IP: </div>
-                    <div class="line-value">${website.ip}</div>
-                </div>
-
-                <div class="info-item">
-                    <div class="line-label">Status: </div>
+                    <div class="line-label" id="details">Notes: </div>
                     <div class="line-value">${website.status}</div>
                 </div>
 
                 <div class="info-item">
-                    <div class="line-label">Id: </div>
+                    <div class="line-label" id="details">IP: </div>
+                    <div class="line-value">${website.ip}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="line-label" id="details">Location: </div>
+                    <div class="line-value">${website.location}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="line-label" id="details">Status: </div>
+                    <div class="line-value">${website.delayResponse}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="line-label" id="details">Load Time: </div>
+                    <div class="line-value">${website.loadTime}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="line-label" id="details">Id: </div>
                     <div class="line-value">${website.id}</div>
                 </div>
 
                 <div class="info-item-rem">
+
+                    <form action="/website/update/${website.id}" method="post">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        <input class="update-in-info" type="submit" value="Update"/>
+                    </form>
+
                     <form action="/website/remove/${website.id}" method="post">
                         <input type="hidden" name="_csrf" value="${_csrf.token}">
-                        <input class="rem-in-info" type="submit" value="Remove"/>
+                        <input class="remove-in-info" type="submit" value="Remove"/>
                     </form>
+
+
                 </div>
 
             </div>

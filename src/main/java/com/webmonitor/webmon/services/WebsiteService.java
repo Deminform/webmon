@@ -1,16 +1,32 @@
 package com.webmonitor.webmon.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webmonitor.webmon.models.Website;
 import com.webmonitor.webmon.repositories.WebsiteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -74,8 +90,6 @@ public class WebsiteService {
 //    }
 
 
-
-
     public String checkOnline(String domain) {
 
         try {
@@ -89,22 +103,54 @@ public class WebsiteService {
             return "Error: " + e.getMessage();
         }
     }
+//
+//    public String checkIp(String domain) {
+//
+//        try {
+//            InetAddress inetAddress = InetAddress.getByName(domain);
+//            String ipAddress = inetAddress.getHostAddress();
+//            return ipAddress;
+//        } catch (UnknownHostException e) {
+//            return "Error getting the IP address of the site: " + e.getMessage();
+//        }
+//    }
 
-    public String checkIp(String domain) {
+    public String[] checkIp(String domain) {
+        String ipAddress;
+        String continentCode;
+        String countryName;
 
         try {
+            // Получаем IP-адрес по доменному имени
             InetAddress inetAddress = InetAddress.getByName(domain);
-            String ipAddress = inetAddress.getHostAddress();
-            return  "IP: " + ipAddress;
-        } catch (UnknownHostException e) {
-            return "Ошибка при получении IP адреса сайта: " + e.getMessage();
+            ipAddress = inetAddress.getHostAddress();
+
+            // Получаем страну и континент по IP-адресу с помощью ipapi.co
+            String url = "https://ipapi.co/" + ipAddress + "/json/";
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            JsonNode node = new ObjectMapper().readTree(response.body());
+            continentCode = node.get("continent_code").asText();
+            countryName = node.get("country_name").asText();
+
+        } catch (IOException | InterruptedException e) {
+            // Если что-то пошло не так, возвращаем null
+            return null;
         }
+
+        return new String[] {ipAddress, countryName + " / " + continentCode};
     }
 
     public String checkDelay(String domain) {
 
         try {
-            URL url = new URL(domain);
+            URL url = new URL("https://" + domain);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("HEAD");
             connection.setConnectTimeout(5000);
@@ -112,15 +158,91 @@ public class WebsiteService {
             connection.connect();
             long endTime = System.currentTimeMillis();
             long duration = endTime - startTime;
-            return "Site response speed: " + duration + " ms";
+            return duration + " ms";
         } catch (IOException e) {
+//            log.info("*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* Test Delay Error: " + e.getMessage());
             return "Error when getting site response rate: " + e.getMessage();
         }
     }
 
 
+//    public String[] checkLoadTimeAndScreenshot(String domain) {
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--remote-debugging-port=9515");
+//        System.setProperty("webdriver.chrome.driver", "D:\\Projects\\justForTest\\webmonapp\\src\\main\\resources\\chromedriver\\chromedriver.exe");
+//        WebDriver driver = new ChromeDriver(options);
+//        driver.get("https:/" + domain);
+//
+//        Dimension dimension = new Dimension(1920, 1024);
+//        driver.manage().window().setSize(dimension);
+//
+//        long startTime = System.currentTimeMillis();
+//        driver.getTitle(); // ожидаем, пока страница полностью загрузится
+//        String screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+//        long endTime = System.currentTimeMillis();
+//
+//        long loadTime = endTime - startTime;
+//
+//
+//        driver.quit();
+//        log.info("+++++++++++++++++++++++++++++++++++++++++++++Screenshot CODE is:" + screenshot);
+//        return new String[] { String.format("%.2f", loadTime / 100.0) + " s", screenshot };
+//    }
+
+    public String[] checkLoadTimeAndScreenshot(String domain) throws IOException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-debugging-port=9515");
+        System.setProperty("webdriver.chrome.driver", "D:\\Projects\\justForTest\\webmonapp\\src\\main\\resources\\chromedriver\\chromedriver.exe");
+        WebDriver driver = new ChromeDriver(options);
+        driver.get("https:/" + domain);
+
+        Dimension dimension = new Dimension(1920, 1024);
+        driver.manage().window().setSize(dimension);
+
+        long loadEndTime = (Long) ((JavascriptExecutor) driver).executeScript(
+                "return (window.performance.timing.loadEventEnd - window.performance.timing.navigationStart)");
+
+        String screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+        String compressedScreenshot = compressBase64Image(screenshot, 3); // сжимаем изображение в 3 раза
+
+        double loadTime = loadEndTime / 1000.0;
+
+        driver.quit();
+        return new String[] { String.format("%.2f", loadTime) + " s", compressedScreenshot };
+    }
 
 
+    private static String compressBase64Image(String base64Image, int compressionFactor) throws IOException {
+        byte[] bytes = Base64.getDecoder().decode(base64Image);
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
+
+        int newWidth = image.getWidth() / compressionFactor;
+        int newHeight = image.getHeight() / compressionFactor;
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, image.getType());
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(image, 0, 0, newWidth, newHeight, null);
+        g.dispose();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(resizedImage, "png", outputStream);
+
+        byte[] compressedBytes = outputStream.toByteArray();
+        String compressedBase64Image = Base64.getEncoder().encodeToString(compressedBytes);
+
+        return compressedBase64Image;
+    }
+
+    public String imageToBase64() {
+        String base64Image = "";
+        try {
+            byte[] imageBytes = Files.readAllBytes(Paths.get("src/main/resources/static/images/404.jpg"));
+            base64Image = Base64.getEncoder().encodeToString(imageBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info(base64Image);
+        return base64Image;
+    }
 
 
 
