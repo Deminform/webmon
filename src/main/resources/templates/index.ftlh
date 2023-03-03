@@ -10,7 +10,8 @@
 <div class="overlay"></div>
 
 <div class="auth-line">
-    <a href="/auth">Sign Up    |    Sign In</a>
+    <a href="/auth/signin">Sign In</a>
+    <a href="/auth/signup">Sign Up</a>
 </div>
 
 <div class="bottom-left-text">

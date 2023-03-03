@@ -36,6 +36,9 @@ public class Website {
     @Column(name = "location")
     private String location;
 
+    @Column(name = "lastupdate")
+    private String lastUpdate;
+
     @Column(name = "screenshot", length = 5000000)
     private String screenshot;
 

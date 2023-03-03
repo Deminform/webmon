@@ -12,7 +12,7 @@
 <div>
     <div class="menu-line">
         <div class="menu-item"><a href="/">Homepage</a></div>
-        <div class="menu-item"><a href="/auth">Profile</a></div>
+        <div class="menu-item"><a href="/auth/signin">Profile</a></div>
         <div class="menu-item"><a href="/website">Website Monitoring</a></div>
         <div class="menu-item"><a href="/website">
                 <form action="/user/logout" method="post">
@@ -32,7 +32,7 @@
 
                         <div class="web-show-inline">
                             <li class="list-li">
-                                <a class="a-list" href="/website/${website.id}">${website.domain}</a>
+                                <a class="a-list" href="/website/${website.domain}">${website.domain}</a>
                             </li>
                         </div>
                     </ul>
@@ -45,12 +45,6 @@
 
         <div class="info-right-details">
 
-            <div>
-<#--                <#list images as img>-->
-<#--                    <img class="preview-img" alt="Image" src="/images/${img.id}" height="160px"/><br/><br/>-->
-<#--                </#list>-->
-            </div>
-
             <div class="info-right-line">
 
                 <div id="image-web-line">
@@ -59,7 +53,7 @@
 
                 <div class="info-item">
                     <div class="line-label" id="details">Domain: </div>
-                    <div class="line-value">${website.domain}</div>
+                    <div class="line-value"><a href="https://${website.domain}" target="_blank">${website.domain}</a></div>
                 </div>
 
                 <div class="info-item">
@@ -88,18 +82,24 @@
                 </div>
 
                 <div class="info-item">
+                    <div class="line-label" id="details">Last update: </div>
+                    <div class="calc-date line-value" id="time-${website.id}">${website.lastUpdate}</div>
+
+                </div>
+
+                <div class="info-item">
                     <div class="line-label" id="details">Id: </div>
                     <div class="line-value">${website.id}</div>
                 </div>
 
                 <div class="info-item-rem">
 
-                    <form action="/website/update/${website.id}" method="post">
+                    <form action="/website/update/${website.domain}" method="post">
                         <input type="hidden" name="_csrf" value="${_csrf.token}">
                         <input class="update-in-info" type="submit" value="Update"/>
                     </form>
 
-                    <form action="/website/remove/${website.id}" method="post">
+                    <form action="/website/remove/${website.domain}" method="post">
                         <input type="hidden" name="_csrf" value="${_csrf.token}">
                         <input class="remove-in-info" type="submit" value="Remove"/>
                     </form>
@@ -113,6 +113,33 @@
     </div>
 
 </div>
+
+<script>
+    window.onload = function () {
+        var websites = document.querySelectorAll('.calc-date');
+        for (var i = 0; i < websites.length; i++) {
+            var website = websites[i];
+            var lastUpdateStr = website.textContent.trim();
+            var lastUpdateDate = new Date(lastUpdateStr);
+            var now = new Date();
+            var diff = Math.abs(now - lastUpdateDate) / 1000;
+
+            var hours = Math.floor(diff / 3600);
+            diff -= hours * 3600;
+            var minutes = Math.floor(diff / 60);
+
+            var timeString = "";
+            if (hours > 0) {
+                timeString += hours + " hour" + (hours > 1 ? "s" : "") + ", ";
+            }
+            if (minutes > 0 || timeString === "") {
+                timeString += minutes + " minute" + (minutes > 1 ? "s" : "");
+            }
+
+            website.textContent = timeString + " ago";
+        }
+    };
+</script>
 
 </body>
 </html>
