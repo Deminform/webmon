@@ -49,7 +49,7 @@ public class AuthenticationController {
 
     @GetMapping("/signin")
     public String showProfile(Model model, HttpServletRequest request) {
-        String email = getEmailFromCookie(request);
+        String email = service.getEmailFromCookie(request);
         return userRepository.findByEmail(email)
                 .map(user -> {
                     model.addAttribute("user", user);
@@ -59,18 +59,18 @@ public class AuthenticationController {
     }
 
 
-    private String getEmailFromCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("jwt")) {
-                    String token = cookie.getValue();
-                    return jwtService.extractUsername(token);
-                }
-            }
-        }
-        return null;
-    }
+//    private String getEmailFromCookie(HttpServletRequest request) {
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if (cookie.getName().equals("jwt")) {
+//                    String token = cookie.getValue();
+//                    return jwtService.extractUsername(token);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
 
     @PostMapping("/signing")

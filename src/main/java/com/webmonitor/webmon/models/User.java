@@ -3,6 +3,7 @@ package com.webmonitor.webmon.models;
 import com.webmonitor.webmon.user.Role;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -37,8 +38,14 @@ public class User implements UserDetails {
   @Column(nullable=false)
   private String password;
 
+  @Column
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+  private List<Website> websiteList = new ArrayList<>();
+
   @Enumerated(EnumType.STRING)
   private Role role;
+
+
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

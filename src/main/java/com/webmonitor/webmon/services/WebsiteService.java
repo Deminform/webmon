@@ -2,10 +2,14 @@ package com.webmonitor.webmon.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webmonitor.webmon.models.User;
 import com.webmonitor.webmon.models.Website;
+import com.webmonitor.webmon.repositories.UserRepository;
 import com.webmonitor.webmon.repositories.WebsiteRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Request;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -23,6 +27,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +40,7 @@ import java.util.List;
 public class WebsiteService {
 
     private final WebsiteRepository websiteRepository;
+    private final AuthenticationService service;
 
 
     public List<Website> lisOftWebsites(String domain) {
@@ -78,11 +84,12 @@ public class WebsiteService {
         return websiteRepository.findAll();
     }
 
-    public void saveWebsite(Website website) throws IOException {
-        Website websiteFromDb = websiteRepository.save(website);
+    public void saveWebsite(HttpServletRequest request, Website website) {
+        website.setUser(service.getUserFromCookie(request));
         log.info("++ saveWebsite " + website.getDomain());
         websiteRepository.save(website);
     }
+
 
 //
 //    public String checkOnline(String domain) {

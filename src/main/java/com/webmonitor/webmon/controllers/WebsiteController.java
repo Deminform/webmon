@@ -2,6 +2,7 @@ package com.webmonitor.webmon.controllers;
 
 import com.webmonitor.webmon.models.Website;
 import com.webmonitor.webmon.services.WebsiteService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -59,16 +60,16 @@ public class WebsiteController {
 //    }
 
     @PostMapping("/website/create")
-    public String addWebsite(Website website) throws IOException {
-        buildWebsite(website);
+    public String addWebsite(Website website, HttpServletRequest request) throws IOException {
+        buildWebsite(request, website);
 
         return "redirect:/website";
     }
 
     @PostMapping("/website/update/{domain}")
-    public String updateWebsite(@PathVariable String domain) throws IOException {
+    public String updateWebsite(@PathVariable String domain, HttpServletRequest request) throws IOException {
         Website website = websiteService.getWebsiteByDomain(domain);
-        buildWebsite(website);
+        buildWebsite(request, website);
 
         return "redirect:/website/{domain}";
     }
@@ -91,9 +92,9 @@ public class WebsiteController {
 //    }
 
     @PostMapping("/website/update-local/{domain}")
-    public String updateWebsites(@PathVariable String domain, Model model) throws IOException {
+    public String updateWebsites(@PathVariable String domain, Model model, HttpServletRequest request) throws IOException {
         Website website = websiteService.getWebsiteByDomain(domain);
-        buildWebsite(website);
+        buildWebsite(request, website);
 
         return "redirect:/website";
     }
@@ -104,7 +105,7 @@ public class WebsiteController {
         return domain.trim();
     }
 
-    public void buildWebsite(Website website) throws IOException {
+    public void buildWebsite(HttpServletRequest request, Website website) throws IOException {
 
         website.setDomain(checkUrl(website.getDomain()));
 
@@ -118,7 +119,7 @@ public class WebsiteController {
             website.setLoadTime("No data");
             website.setLastUpdate(websiteService.getCurrentDateTimeAsString());
             website.setScreenshot(websiteService.imageToBase64());
-            websiteService.saveWebsite(website);
+            websiteService.saveWebsite(request, website);
         } else {
 
             website.setStatus(status);
@@ -131,7 +132,7 @@ public class WebsiteController {
             website.setLoadTime(loadTimeAndScreenshot[0]);
             website.setScreenshot(loadTimeAndScreenshot[1]);
             website.setLastUpdate(websiteService.getCurrentDateTimeAsString());
-            websiteService.saveWebsite(website);
+            websiteService.saveWebsite(request, website);
         }
 
     }

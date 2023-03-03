@@ -6,6 +6,8 @@ import com.webmonitor.webmon.auth.RegisterRequest;
 import com.webmonitor.webmon.user.Role;
 import com.webmonitor.webmon.models.User;
 import com.webmonitor.webmon.repositories.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,5 +57,25 @@ public class AuthenticationService {
         .token(jwtToken)
         .build();
   }
+
+  public String getEmailFromCookie(HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("jwt")) {
+          String token = cookie.getValue();
+          return jwtService.extractUsername(token);
+        }
+      }
+    }
+    return null;
+  }
+
+  public User getUserFromCookie(HttpServletRequest request) {
+
+    return repository.findByEmail(getEmailFromCookie(request))
+            .orElseThrow(() -> new RuntimeException("User not found")); // userService - ваш сервис пользователей, findByEmail() - метод, который находит пользователя по его email
+  }
+
 
 }
