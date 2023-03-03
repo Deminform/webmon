@@ -2,19 +2,17 @@ package com.webmonitor.webmon.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webmonitor.webmon.models.User;
 import com.webmonitor.webmon.models.Website;
-import com.webmonitor.webmon.repositories.UserRepository;
 import com.webmonitor.webmon.repositories.WebsiteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Request;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -27,8 +25,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.Principal;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -43,45 +39,45 @@ public class WebsiteService {
     private final AuthenticationService service;
 
 
-    public List<Website> lisOftWebsites(String domain) {
+    public List<Website> lisOftWebsites(String domain, HttpServletRequest request) {
 
         if (domain != null) {
-            Website website = websiteRepository.findByDomain(domain);
+            Website website = websiteRepository.findByDomainAndUser(domain, service.getUserFromCookie(request));
             if (website != null) {
                 log.info("++ websiteRepository one in List" + website);
                 return new ArrayList<>(Arrays.asList(website));
             }
         }
 
-        List<Website> websites = websiteRepository.findAll();
+        List<Website> websites = websiteRepository.findAllByUser(service.getUserFromCookie(request));
         Collections.reverse(websites);
         log.info("++ websiteRepository " + domain);
         return websites;
     }
 
-    public void removeWebsite(String domain) {
+    public void removeWebsite(String domain, HttpServletRequest request) {
         log.info("++ removeWebsite domain " + domain);
-        websiteRepository.deleteById(getWebsiteByDomain(domain).getId());
+        websiteRepository.deleteById(getWebsiteByDomain(domain, request).getId());
     }
 
-    public void removeWebsite(Long id) {
-        log.info("++ removeWebsite id" + id);
-        websiteRepository.deleteById(id);
-    }
+//    public void removeWebsite(Long id) {
+//        log.info("++ removeWebsite id" + id);
+//        websiteRepository.deleteById(id);
+//    }
 
     public Website getWebsiteById(Long id) {
         log.info("++ getWebsiteById " + id);
         return websiteRepository.findById(id).orElse(null);
     }
 
-    public Website getWebsiteByDomain(String domain) {
+    public Website getWebsiteByDomain(String domain, HttpServletRequest request) {
         log.info("++ getWebsiteByDomain " + domain);
-        return websiteRepository.findByDomain(domain);
+        return websiteRepository.findByDomainAndUser(domain, service.getUserFromCookie(request));
     }
 
-    public List<Website> getAllWebsite() {
+    public List<Website> getAllWebsite(HttpServletRequest request) {
         log.info("++ getAllWebsite ");
-        return websiteRepository.findAll();
+        return websiteRepository.findAllByUser(service.getUserFromCookie(request));
     }
 
     public void saveWebsite(HttpServletRequest request, Website website) {
@@ -90,18 +86,6 @@ public class WebsiteService {
         websiteRepository.save(website);
     }
 
-
-//
-//    public String checkOnline(String domain) {
-//        try {
-//            HttpURLConnection connection = (HttpURLConnection) new URL(domain).openConnection();
-//            connection.setRequestMethod("HEAD");
-//            int responseCode = connection.getResponseCode();
-//            return (responseCode == HttpURLConnection.HTTP_OK) ? "Online" : "Offline";
-//        } catch (IOException e) {
-//            return "Error: " + e.getMessage();
-//        }
-//    }
 
     public String checkOnline(String domain) {
         log.info("++ CheckOnline " + domain);
@@ -155,7 +139,7 @@ public class WebsiteService {
             return null;
         }
         log.info("++ checkIp " + ipAddress + " " + countryName + " " + continentCode);
-        return new String[] {ipAddress, countryName + " / " + continentCode};
+        return new String[]{ipAddress, countryName + " / " + continentCode};
     }
 
     public String checkDelay(String domain) {
@@ -196,7 +180,7 @@ public class WebsiteService {
 
         driver.quit();
         log.info("++ checkLoadTimeAndScreenshot " + loadTime);
-        return new String[] { String.format("%.2f", loadTime) + " s", compressedScreenshot };
+        return new String[]{String.format("%.2f", loadTime) + " s", compressedScreenshot};
     }
 
 
@@ -217,7 +201,7 @@ public class WebsiteService {
         byte[] compressedBytes = outputStream.toByteArray();
         String compressedBase64Image = Base64.getEncoder().encodeToString(compressedBytes);
 
-        log.info("++ compressBase64Image " );
+        log.info("++ compressBase64Image ");
         return compressedBase64Image;
     }
 

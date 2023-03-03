@@ -19,16 +19,16 @@ public class WebsiteController {
     private final WebsiteService websiteService;
 
     @GetMapping("/website")
-    public String websites(@RequestParam(name = "domain", required = false) String domain, Model model) {
-        model.addAttribute("websites", websiteService.lisOftWebsites(domain));
+    public String websites(@RequestParam(name = "domain", required = false) String domain, Model model, HttpServletRequest request) {
+        model.addAttribute("websites", websiteService.lisOftWebsites(domain, request));
         return "website";
     }
 
 
     @GetMapping("/website/{domain}")
-    public String websiteInfo(@PathVariable String domain, Model model) {
-        Website website = websiteService.getWebsiteByDomain(domain);
-        model.addAttribute("websites", websiteService.getAllWebsite());
+    public String websiteInfo(@PathVariable String domain, Model model, HttpServletRequest request) {
+        Website website = websiteService.getWebsiteByDomain(domain, request);
+        model.addAttribute("websites", websiteService.getAllWebsite(request));
         model.addAttribute("website", website);
 
         return "website-info";
@@ -44,8 +44,8 @@ public class WebsiteController {
 //    }
 
     @PostMapping("/website/remove/{domain}")
-    public String removeWebsite(@PathVariable String domain) {
-        websiteService.removeWebsite(domain);
+    public String removeWebsite(@PathVariable String domain, HttpServletRequest request) {
+        websiteService.removeWebsite(domain, request);
 
         return "redirect:/website";
     }
@@ -68,7 +68,7 @@ public class WebsiteController {
 
     @PostMapping("/website/update/{domain}")
     public String updateWebsite(@PathVariable String domain, HttpServletRequest request) throws IOException {
-        Website website = websiteService.getWebsiteByDomain(domain);
+        Website website = websiteService.getWebsiteByDomain(domain, request);
         buildWebsite(request, website);
 
         return "redirect:/website/{domain}";
@@ -93,7 +93,7 @@ public class WebsiteController {
 
     @PostMapping("/website/update-local/{domain}")
     public String updateWebsites(@PathVariable String domain, Model model, HttpServletRequest request) throws IOException {
-        Website website = websiteService.getWebsiteByDomain(domain);
+        Website website = websiteService.getWebsiteByDomain(domain, request);
         buildWebsite(request, website);
 
         return "redirect:/website";
