@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webmonitor.webmon.models.Website;
 import com.webmonitor.webmon.repositories.WebsiteRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -33,6 +34,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class WebsiteService {
 
     private final WebsiteRepository websiteRepository;
@@ -42,10 +44,10 @@ public class WebsiteService {
     public List<Website> lisOftWebsites(String domain, HttpServletRequest request) {
 
         if (domain != null) {
-            Website website = websiteRepository.findByDomainAndUser(domain, service.getUserFromCookie(request));
+            Website website = websiteRepository.findByDomainAndUser(domain, service.getUserFromCookie(request)).orElseThrow(() -> new RuntimeException("Website not found"));
             if (website != null) {
                 log.info("++ websiteRepository one in List" + website);
-                return new ArrayList<>(Arrays.asList(website));
+                return new ArrayList<>(List.of(website));
             }
         }
 
@@ -57,13 +59,9 @@ public class WebsiteService {
 
     public void removeWebsite(String domain, HttpServletRequest request) {
         log.info("++ removeWebsite domain " + domain);
+        service.getUserFromCookie(request).getWebsiteList().remove(websiteRepository.findByDomainAndUser(domain, service.getUserFromCookie(request)).orElseThrow(() -> new RuntimeException("User not found")));
         websiteRepository.deleteById(getWebsiteByDomain(domain, request).getId());
     }
-
-//    public void removeWebsite(Long id) {
-//        log.info("++ removeWebsite id" + id);
-//        websiteRepository.deleteById(id);
-//    }
 
     public Website getWebsiteById(Long id) {
         log.info("++ getWebsiteById " + id);
@@ -72,7 +70,7 @@ public class WebsiteService {
 
     public Website getWebsiteByDomain(String domain, HttpServletRequest request) {
         log.info("++ getWebsiteByDomain " + domain);
-        return websiteRepository.findByDomainAndUser(domain, service.getUserFromCookie(request));
+        return websiteRepository.findByDomainAndUser(domain, service.getUserFromCookie(request)).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public List<Website> getAllWebsite(HttpServletRequest request) {
@@ -95,7 +93,7 @@ public class WebsiteService {
             if (inetAddress.isReachable(5000)) {
                 return "online";
             } else {
-                // retry 2 more times with 1 second delay
+                // retry 2 more times with 1s delay
                 for (int i = 0; i < 2; i++) {
                     Thread.sleep(1000); // wait for 1 second
                     inetAddress = InetAddress.getByName(domain);
@@ -174,7 +172,7 @@ public class WebsiteService {
                 "return (window.performance.timing.loadEventEnd - window.performance.timing.navigationStart)");
 
         String screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
-        String compressedScreenshot = compressBase64Image(screenshot, 3); // сжимаем изображение в 3 раза
+        String compressedScreenshot = compressBase64Image(screenshot); // сжимаем изображение в 3 раза
 
         double loadTime = loadEndTime / 1000.0;
 
@@ -184,12 +182,12 @@ public class WebsiteService {
     }
 
 
-    private static String compressBase64Image(String base64Image, int compressionFactor) throws IOException {
+    private static String compressBase64Image(String base64Image) throws IOException {
         byte[] bytes = Base64.getDecoder().decode(base64Image);
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
 
-        int newWidth = image.getWidth() / compressionFactor;
-        int newHeight = image.getHeight() / compressionFactor;
+        int newWidth = image.getWidth() / 3;
+        int newHeight = image.getHeight() / 3;
         BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, image.getType());
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(image, 0, 0, newWidth, newHeight, null);

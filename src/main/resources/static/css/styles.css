@@ -598,6 +598,14 @@ span.error-message {
     font-size: 14px;
 }
 
+span#success {
+    color: green;
+}
+
+span#failed {
+    color: red;
+}
+
 
 
 

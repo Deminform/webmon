@@ -3,6 +3,7 @@ package com.webmonitor.webmon.services;
 import com.webmonitor.webmon.auth.AuthenticationRequest;
 import com.webmonitor.webmon.auth.AuthenticationResponse;
 import com.webmonitor.webmon.auth.RegisterRequest;
+import com.webmonitor.webmon.models.Website;
 import com.webmonitor.webmon.user.Role;
 import com.webmonitor.webmon.models.User;
 import com.webmonitor.webmon.repositories.UserRepository;
@@ -71,11 +72,11 @@ public class AuthenticationService {
     return null;
   }
 
-  public User getUserFromCookie(HttpServletRequest request) {
+    public User getUserFromCookie(HttpServletRequest request) {
 
-    return repository.findByEmail(getEmailFromCookie(request))
-            .orElseThrow(() -> new RuntimeException("User not found")); // userService - ваш сервис пользователей, findByEmail() - метод, который находит пользователя по его email
-  }
+        return repository.findByEmail(getEmailFromCookie(request))
+                .orElseThrow(() -> new RuntimeException("User not found")); // userService - ваш сервис пользователей, findByEmail() - метод, который находит пользователя по его email
+    }
 
 
 }

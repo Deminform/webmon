@@ -1,6 +1,7 @@
 package com.webmonitor.webmon.controllers;
 
 import com.webmonitor.webmon.models.Website;
+import com.webmonitor.webmon.services.AuthenticationService;
 import com.webmonitor.webmon.services.WebsiteService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.io.IOException;
 
 
@@ -17,13 +20,17 @@ import java.io.IOException;
 @RequestMapping
 public class WebsiteController {
     private final WebsiteService websiteService;
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/website")
-    public String websites(@RequestParam(name = "domain", required = false) String domain, Model model, HttpServletRequest request) {
+    public String websites(@RequestParam(name = "domain", required = false) String domain, Model model, HttpServletRequest request, @ModelAttribute("message") String message, @ModelAttribute("errormessage") String message2) {
         model.addAttribute("websites", websiteService.lisOftWebsites(domain, request));
+        model.addAttribute("message", message);
+        model.addAttribute("errormessage", message2);
+
+
         return "website";
     }
-
 
     @GetMapping("/website/{domain}")
     public String websiteInfo(@PathVariable String domain, Model model, HttpServletRequest request) {
@@ -31,17 +38,9 @@ public class WebsiteController {
         model.addAttribute("websites", websiteService.getAllWebsite(request));
         model.addAttribute("website", website);
 
+
         return "website-info";
     }
-
-//    @GetMapping("/website/{id}")
-//    public String websiteInfo(@RequestParam(name = "domain", required = false) String domain, @PathVariable Long id, Model model) {
-//        Website website = websiteService.getWebsiteById(id);
-//        model.addAttribute("websites", websiteService.lisOftWebsites(domain));
-//        model.addAttribute("website", website);
-//
-//        return "website-info";
-//    }
 
     @PostMapping("/website/remove/{domain}")
     public String removeWebsite(@PathVariable String domain, HttpServletRequest request) {
@@ -51,45 +50,44 @@ public class WebsiteController {
     }
 
 
-//    @PostMapping("/website/remove/{id}")
-//    public String removeWebsite(@PathVariable Long id) {
-//        websiteService.removeWebsite(id);
-//        log.info("id: " + id);
-//
-//        return "redirect:/website";
-//    }
-
     @PostMapping("/website/create")
-    public String addWebsite(Website website, HttpServletRequest request) throws IOException {
-        buildWebsite(request, website);
+    public String addWebsite(Website website, HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException {
+
+        log.info(" CHECK Websitelist -------------------------- " + authenticationService.getUserFromCookie(request).getWebsiteList().contains(website));
+
+        try {
+            if (getWebsite(website.getDomain(), request).getUser().getId() == authenticationService.getUserFromCookie(request).getId()) {
+                redirectAttributes.addFlashAttribute("message", "The domain already exists");
+                redirectAttributes.addFlashAttribute("errormessage", "failed");
+            } else {
+                buildWebsite(request, website);
+                redirectAttributes.addFlashAttribute("message", "Site has been successfully added");
+                redirectAttributes.addFlashAttribute("errormessage", "success");
+                return "redirect:/website";
+            }
+        } catch (RuntimeException exception) {
+            log.info("User not found" + exception);
+            buildWebsite(request, website);
+            redirectAttributes.addFlashAttribute("message", "Site has been successfully added");
+            redirectAttributes.addFlashAttribute("errormessage", "success");
+            return "redirect:/website";
+        }
 
         return "redirect:/website";
     }
 
     @PostMapping("/website/update/{domain}")
     public String updateWebsite(@PathVariable String domain, HttpServletRequest request) throws IOException {
-        Website website = websiteService.getWebsiteByDomain(domain, request);
-        buildWebsite(request, website);
+
+        buildWebsite(request, getWebsite(domain, request));
 
         return "redirect:/website/{domain}";
     }
 
-//    @PostMapping("/website/update/{id}")
-//    public String updateWebsite(@PathVariable Long id) throws IOException {
-//        Website website = websiteService.getWebsiteById(id);
-//        buildWebsite(website);
-//
-//        return "redirect:/website/{id}";
-//    }
+    private Website getWebsite(String domain, HttpServletRequest request) {
+        return websiteService.getWebsiteByDomain(domain, request);
+    }
 
-
-//    @PostMapping("/website/update-local/{id}")
-//    public String updateWebsites(@RequestParam(name = "domain", required = false) String domain, @PathVariable Long id) throws IOException {
-//        Website website = websiteService.getWebsiteById(id);
-//        buildWebsite(website);
-//
-//        return "redirect:/website";
-//    }
 
     @PostMapping("/website/update-local/{domain}")
     public String updateWebsites(@PathVariable String domain, Model model, HttpServletRequest request) throws IOException {

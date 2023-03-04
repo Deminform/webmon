@@ -36,7 +36,7 @@
             <input class="add-site-input-field" type="text" name="domain" placeholder="Domain"/>
             <input type="hidden" name="_csrf" value="${_csrf.token}">
             <input class="add-site-input-button" type="submit" value="Add website"/>
-            <span class="error-message"></span>
+            <span class="error-message" id="${errormessage}">${message}</span>
         </form>
     </div>
 
@@ -180,9 +180,6 @@
             return true;
         }
     }
-
-
-
 
 
 </script>
